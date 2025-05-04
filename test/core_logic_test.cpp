@@ -107,6 +107,24 @@ int main(){
         number_of_tests_failed++;
     }
 
+    input = 0b00101010;
+    op = OperationType::NONE;
+
+    operation_map.at(op)(input, mask);
+
+    number_of_tests++;
+    //Expected output for NONE
+    if(input == 0b00101010){
+        std::cout << "\noperation NONE passed\n";
+        number_of_tests_passed++;
+    }else{
+        std::cout << "\noperation NONE failed\n";
+        number_of_tests_failed++;
+    }
+
+    //END BIT OPERATIONS
+
+    //FINAL TEST STATEMENT
     std::cout << "\n\nNUMBER OF TESTS: " << number_of_tests << "\nNUMBER OF TESTS PASSED: " << number_of_tests_passed << "\nNUMBER OF TESTS FAILED: " << number_of_tests_failed << std::endl;
 
     return 0;
