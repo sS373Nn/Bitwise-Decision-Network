@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <functional>
 #include <vector>
+#include <bitset>
 
 enum class OperationType{
     AND,
@@ -19,7 +20,12 @@ enum class OperationType{
 
 struct Operation_Node{
     //Can use std::unordered_set<uint8_t> to determine if we've already used a mask or not
+    //std::unoredered_set too clunky for lager number of nodes -> std::bitset instead
     uint8_t mask;
+    uint8_t mask_index;
+    uint8_t step;
+    std::vector<uint64_t> *mask_vector;
+    std::bitset<256> used_mask_memory;
     
     //Pick op at random?
     OperationType operation;
@@ -27,8 +33,10 @@ struct Operation_Node{
     //Should be tied to SHIFT iff op == SHIFT
     uint8_t shiftAmount;
 
-    //Assessment metric
-    float weight;
+    //Retry operation with new values
+    //Initialize to true
+    //Set to false on acceptance
+    bool retry;
 
     Operation_Node(uint8_t mask, OperationType operation, uint8_t shiftAmount);
 };
@@ -40,5 +48,8 @@ extern const std::unordered_map<OperationType, std::function<void(uint8_t&, cons
 //For efficiency, we build our pool as a vector of uint64_t
 //Each mask is only uint8_t, however building this way should allow us more long term efficiency by sharing cache hits
 const std::vector<uint64_t> create_mask_pool();
+
+//Choose our mask and check it off in our applied_masks bitset
+void pick_mask(uint8_t &mask, std::bitset<256> &applied_masks, const std::vector<uint64_t> &mask_pool);
 
 #endif

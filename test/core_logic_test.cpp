@@ -124,6 +124,45 @@ int main(){
 
     //END BIT OPERATIONS
 
+
+    //BIT MASK POOL
+
+    std::vector<uint64_t> test_mask_pool = create_mask_pool();
+
+    number_of_tests++;
+    //Expected size
+    if(test_mask_pool.size() == 32){
+        std::cout << "\nmask pool size correct\n";
+        number_of_tests_passed++;
+    }else{
+        std::cout << "\nmask pool size incorrect\n";
+        number_of_tests_failed++;
+    }
+
+    uint64_t index0 = 0x0706050403020100;
+    uint64_t index1 = 0x0F0E0D0C0B0A0908;
+    uint64_t index31 = 0xFFFEFDFCFBFAF9F8;
+
+    number_of_tests++;
+    //Expected value of index 0, 1 and 31
+    //Break into three tests
+    if(test_mask_pool[0] == index0 && test_mask_pool[1] == index1 && test_mask_pool[31] == index31){
+        std::cout << "\nexpected values correct\n";
+        number_of_tests_passed++;
+    }else{
+        std::cout << "\nexpected values incorrect\n";
+        number_of_tests_failed++;
+    }
+
+    //END BIT MASK POOL
+
+    
+    //MASK GENERATION
+
+
+
+    //END MASK GENERATION
+
     //FINAL TEST STATEMENT
     std::cout << "\n\nNUMBER OF TESTS: " << number_of_tests << "\nNUMBER OF TESTS PASSED: " << number_of_tests_passed << "\nNUMBER OF TESTS FAILED: " << number_of_tests_failed << std::endl;
 

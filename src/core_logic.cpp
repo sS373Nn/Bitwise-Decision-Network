@@ -1,6 +1,6 @@
 #include "core_logic.hpp"
 
-Operation_Node::Operation_Node(uint8_t mask, OperationType operation, uint8_t shiftAmount) : mask(mask), operation(operation), shiftAmount(shiftAmount) {};
+Operation_Node::Operation_Node(uint8_t mask, OperationType operation, uint8_t shiftAmount) : mask(mask), operation(operation), shiftAmount(shiftAmount), retry(true) {};
 
 const std::unordered_map<OperationType, std::function<void(uint8_t&, const uint8_t&)>> operation_map {
     {OperationType::AND, [](uint8_t &input, const uint8_t &mask) {return input &= mask;}},
@@ -32,4 +32,9 @@ const std::vector<uint64_t> create_mask_pool(){
     }
     
     return mask_vector;
+}
+
+//Choose our mask and check it off in our applied_masks bitset
+void pick_mask(uint8_t &mask, std::bitset<256> &applied_masks, const std::vector<uint64_t> &mask_pool){
+    
 }
