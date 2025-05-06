@@ -1,5 +1,6 @@
 @echo off
 
+REM Works for now, but there is probably a better way to recompile at each test without rebuilding all the static files from gtest
 
 echo [Compiling GoogleTest sources...]
 

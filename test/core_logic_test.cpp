@@ -21,7 +21,7 @@ int main(){
     operation_map.at(op)(input, mask);
 
     number_of_tests++;
-    //Expected output for AND
+    //Expected output for AND DONE
     if(input == 0b00000000){
         std::cout << "\noperation AND passed\n";
         number_of_tests_passed++;
@@ -36,7 +36,7 @@ int main(){
     operation_map.at(op)(input, mask);
 
     number_of_tests++;
-    //Expected output for OR
+    //Expected output for OR DONE
     if(input == 0b11111111){
         std::cout << "\noperation OR passed\n";
         number_of_tests_passed++;
@@ -51,7 +51,7 @@ int main(){
     operation_map.at(op)(input, mask);
 
     number_of_tests++;
-    //Expected output for XOR
+    //Expected output for XOR DONE
     if(input == 0b01111111){
         std::cout << "\noperation XOR passed\n";
         number_of_tests_passed++;
@@ -67,7 +67,7 @@ int main(){
     operation_map.at(op)(input, amount);
 
     number_of_tests++;
-    //Expected output for SHIFT_LEFT
+    //Expected output for SHIFT_LEFT DONE
     if(input == 0b10101000){
         std::cout << "\noperation SHIFT_LEFT passed\n";
         number_of_tests_passed++;
@@ -83,7 +83,7 @@ int main(){
     operation_map.at(op)(input, amount);
 
     number_of_tests++;
-    //Expected output for SHIFT_RIGHT
+    //Expected output for SHIFT_RIGHT DONE
     if(input == 0b00001010){
         std::cout << "\noperation SHIFT_RIGHT passed\n";
         number_of_tests_passed++;
@@ -98,7 +98,7 @@ int main(){
     operation_map.at(op)(input, mask);
 
     number_of_tests++;
-    //Expected output for NOT
+    //Expected output for NOT DONE
     if(input == 0b11010101){
         std::cout << "\noperation NOT passed\n";
         number_of_tests_passed++;
@@ -113,7 +113,7 @@ int main(){
     operation_map.at(op)(input, mask);
 
     number_of_tests++;
-    //Expected output for NONE
+    //Expected output for NONE DONE
     if(input == 0b00101010){
         std::cout << "\noperation NONE passed\n";
         number_of_tests_passed++;
@@ -125,7 +125,7 @@ int main(){
     //END BIT OPERATIONS
 
 
-    //BIT MASK POOL
+    //BIT MASK POOL DONE
 
     std::vector<uint64_t> test_mask_pool = create_mask_pool();
 
@@ -159,7 +159,13 @@ int main(){
     
     //MASK GENERATION
 
+    //From an unmarked mask_memory location, generate a valid uint8_t mask from test_mask_pool
+    
+    //Mask_pool already created above as 'test_mask_pool'
+    std::bitset<256> marked_mask_memory;
+    uint8_t mask;
 
+    
 
     //END MASK GENERATION
 

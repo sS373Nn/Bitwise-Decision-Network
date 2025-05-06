@@ -23,7 +23,7 @@ struct Operation_Node{
     //std::unoredered_set too clunky for lager number of nodes -> std::bitset instead
     uint8_t mask;
     uint8_t mask_index;
-    uint8_t step;
+    uint8_t step; //MUST be an odd number between 1-255 inclusive
     std::vector<uint64_t> *mask_vector;
     std::bitset<256> used_mask_memory;
     
@@ -50,6 +50,6 @@ extern const std::unordered_map<OperationType, std::function<void(uint8_t&, cons
 const std::vector<uint64_t> create_mask_pool();
 
 //Choose our mask and check it off in our applied_masks bitset
-void pick_mask(uint8_t &mask, std::bitset<256> &applied_masks, const std::vector<uint64_t> &mask_pool);
+void pick_mask(uint8_t &mask, uint8_t &mask_index, std::bitset<256> &applied_masks_memory, const uint8_t &step, const std::vector<uint64_t> &mask_pool);
 
 #endif

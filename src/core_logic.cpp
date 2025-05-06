@@ -35,6 +35,12 @@ const std::vector<uint64_t> create_mask_pool(){
 }
 
 //Choose our mask and check it off in our applied_masks bitset
-void pick_mask(uint8_t &mask, std::bitset<256> &applied_masks, const std::vector<uint64_t> &mask_pool){
-    
+void pick_mask(uint8_t &mask, uint8_t &mask_index, std::bitset<256> &applied_masks_memory, const uint8_t &step, const std::vector<uint64_t> &mask_pool){
+    uint8_t row = mask_index >> 3;
+    uint8_t offset = (mask_index & 0b00000111) << 3;
+    //May not need applied_mask_memory since we can simply use our iteration algorithm to avoid repetition
+    //Else mark the bitset here with mask_index
+
+    mask = (mask_pool[row] >> offset) & 0xFF;
+    mask_index += step;
 }
