@@ -50,6 +50,7 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "xlocale": "cpp",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "*.tpp": "cpp"
     }
 }

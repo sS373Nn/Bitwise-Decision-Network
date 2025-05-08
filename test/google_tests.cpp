@@ -97,11 +97,11 @@ TEST(BitMaskOperations, UpdateMemory){
 }
 
 TEST(OperationNodeOperations, ApplyNodeToInput){
-    uint8_t input = 0b01010101;
-    uint8_t expected_output = 0b01011111;
-    OperationNode OpNode(0b00001111, 1, OperationType::OR);
+    uint64_t input = 0b01010101;
+    uint64_t expected_output = 0b01011111;
+    OperationNode<uint64_t> OpNode(0, 0b00001111, 1, OperationType::OR);
 
     apply_operation_node(OpNode, input);
 
-    EXPECT_EQ(input, expected_output);
+    EXPECT_EQ(*OpNode.output, expected_output);
 }

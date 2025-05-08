@@ -1,10 +1,6 @@
 #include "core_logic.hpp"
 
-OperationNode::OperationNode(uint8_t mask, uint8_t step, OperationType operation, uint8_t shiftAmount) : mask(mask), step(step), operation(operation), shiftAmount(shiftAmount), retry(true) {
-    //Include check to ensure step is odd
-    //However, this doesn't let us keep a step of 0
-    step |= 0b00000001;
-};
+uint64_t output_value = 0;
 
 const std::unordered_map<OperationType, std::function<void(uint8_t&, const uint8_t&)>> operation_map {
     {OperationType::AND, [](uint8_t &input, const uint8_t &mask) {return input &= mask;}},
@@ -33,9 +29,4 @@ void mark_mask_in_memory(std::bitset<256> &applied_masks_memory, const uint8_t &
     //If so, can increment mask to an unused mask
     //Can reset the bitset if ALL masks have been used and indicate this as a break; for computation
     applied_masks_memory.set(mask);
-}
-
-//Apply our OperationNode to our input
-void apply_operation_node(const OperationNode &OpNode, uint8_t &input){
-    operation_map.at(OpNode.operation)(input, OpNode.mask);
 }
