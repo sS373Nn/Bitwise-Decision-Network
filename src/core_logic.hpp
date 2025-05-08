@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <unordered_map>
 #include <functional>
-#include <vector>
+#include <vector> //Unneeded
 #include <bitset>
 
 enum class OperationType{
@@ -18,19 +18,19 @@ enum class OperationType{
     NONE
 };
 
-struct Operation_Node{
+struct OperationNode{
     //Can use std::unordered_set<uint8_t> to determine if we've already used a mask or not
     //std::unoredered_set too clunky for lager number of nodes -> std::bitset instead
-    uint8_t mask;
-    uint8_t mask_index;
+    uint8_t mask; //The mask IS the index
     uint8_t step; //MUST be an odd number between 1-255 inclusive
-    std::vector<uint64_t> *mask_vector;
-    std::bitset<256> used_mask_memory;
+    std::bitset<256> used_mask_memory; //Can keep if necessary later
     
     //Pick op at random?
     OperationType operation;
 
     //Should be tied to SHIFT iff op == SHIFT
+    //Default shiftAmount == 0
+    //If op != shift, then don't input shift value
     uint8_t shiftAmount;
 
     //Retry operation with new values
@@ -38,18 +38,20 @@ struct Operation_Node{
     //Set to false on acceptance
     bool retry;
 
-    Operation_Node(uint8_t mask, OperationType operation, uint8_t shiftAmount);
+    OperationNode(uint8_t mask = 0, uint8_t step = 1, OperationType operation = OperationType::NONE, uint8_t shiftAmount = 0);
 };
 
 //std::unorder_map for lambda operation calls
 extern const std::unordered_map<OperationType, std::function<void(uint8_t&, const uint8_t&)>> operation_map;
 
-//Create our mask pool
-//For efficiency, we build our pool as a vector of uint64_t
-//Each mask is only uint8_t, however building this way should allow us more long term efficiency by sharing cache hits
-const std::vector<uint64_t> create_mask_pool();
+//Iterates through all possible masks from 0-255 one step at a time
+//Step MUST be an odd int between 1-255 inclusive
+void update_mask(uint8_t &mask, const uint8_t &step);
 
-//Choose our mask and check it off in our applied_masks bitset
-void pick_mask(uint8_t &mask, uint8_t &mask_index, std::bitset<256> &applied_masks_memory, const uint8_t &step, const std::vector<uint64_t> &mask_pool);
+//Check to ensure our mask has not been used
+void mark_mask_in_memory(std::bitset<256> &applied_masks_memory, const uint8_t &mask);
+
+//Apply our OperationNode to our input
+void apply_operation_node(const OperationNode &OpNode, uint8_t &input);
 
 #endif

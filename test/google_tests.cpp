@@ -75,30 +75,33 @@ TEST(BitOperations, NONEOperation){
     EXPECT_TRUE(input == 0b00101010);
 }
 
-TEST(BitMaskPool, PoolSizeCheck){
-    //Not a good test, rethink
-    std::vector<uint64_t> test_mask_pool = create_mask_pool();
+TEST(BitMaskOperations, UpdateMask){
+    uint8_t mask = 0b00001010;
+    uint8_t step = 5;
+    uint8_t expected_update = 0b00001111;
 
-    EXPECT_EQ(test_mask_pool.size(), 32);
+    update_mask(mask, step);
+
+    EXPECT_EQ(mask, expected_update);
 }
 
-TEST(BitMaskPool, PoolIndex0Check){
-    std::vector<uint64_t> test_mask_pool = create_mask_pool();
-    uint64_t expected_value_at_index0 = 0x0706050403020100;
+TEST(BitMaskOperations, UpdateMemory){
+    std::bitset<256> mask_memory;
+    uint8_t mask = 0b00001010;
 
-    EXPECT_EQ(test_mask_pool[0], expected_value_at_index0);
+    EXPECT_TRUE(!mask_memory[mask]);
+
+    mark_mask_in_memory(mask_memory, mask);
+
+    EXPECT_TRUE(mask_memory[mask]);
 }
 
-TEST(BitMaskPool, PoolIndex1Check){
-    std::vector<uint64_t> test_mask_pool = create_mask_pool();
-    uint64_t expected_value_at_index1 = 0x0F0E0D0C0B0A0908;
+TEST(OperationNodeOperations, ApplyNodeToInput){
+    uint8_t input = 0b01010101;
+    uint8_t expected_output = 0b01011111;
+    OperationNode OpNode(0b00001111, 1, OperationType::OR);
 
-    EXPECT_EQ(test_mask_pool[1], expected_value_at_index1);
-}
+    apply_operation_node(OpNode, input);
 
-TEST(BitMaskPool, PoolIndex31Check){
-    std::vector<uint64_t> test_mask_pool = create_mask_pool();
-    uint64_t expected_value_at_index31 = 0xFFFEFDFCFBFAF9F8;
-
-    EXPECT_EQ(test_mask_pool[31], expected_value_at_index31);
+    EXPECT_EQ(input, expected_output);
 }
