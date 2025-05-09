@@ -18,6 +18,7 @@ enum class OperationType{
     NONE
 };
 
+
 template<typename T>
 struct OperationNode{
     //Can use std::unordered_set<uint8_t> to determine if we've already used a mask or not
@@ -27,7 +28,7 @@ struct OperationNode{
     std::bitset<256> used_mask_memory; //Can keep if necessary later
 
     //Place modified bits into the output at offset
-    T *output;
+    T *output; //Change to template?
     uint8_t offset;
     
     //Pick op at random?
@@ -61,7 +62,7 @@ void mark_mask_in_memory(std::bitset<256> &applied_masks_memory, const uint8_t &
 
 //Apply our OperationNode to our input
 template<typename T>
-void apply_operation_node(const OperationNode<T> &OpNode, const T *input);
+void apply_operation_node(const OperationNode<T> &OpNode, const T &input);
 
 #include "OperationNode.tpp"
 
