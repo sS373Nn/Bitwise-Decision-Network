@@ -42,7 +42,7 @@ struct OperationNode{
     //Retry operation with new values
     //Initialize to true
     //Set to false on acceptance
-    bool retry;
+    bool accept;
 
     OperationNode(uint8_t offset = 0, uint8_t mask = 0, uint8_t step = 1, OperationType operation = OperationType::NONE, uint8_t shiftAmount = 0);
 };

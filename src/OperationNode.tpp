@@ -1,7 +1,7 @@
 #include "core_logic.hpp"
 
 template<typename T>
-OperationNode<T>::OperationNode(uint8_t offset, uint8_t mask, uint8_t step, OperationType operation, uint8_t shiftAmount) : offset(offset << 3), mask(mask), step(step |= 0b00000001), operation(operation), shiftAmount(shiftAmount & 0x07), retry(true) {
+OperationNode<T>::OperationNode(uint8_t offset, uint8_t mask, uint8_t step, OperationType operation, uint8_t shiftAmount) : offset(offset << 3), mask(mask), step(step |= 0b00000001), operation(operation), shiftAmount(shiftAmount & 0x07), accept(false) {
     //Offset * 8 == location in output
     //Offset is right to left I.E. bit #64 for a uint64_t == bit #0
     //Offset set properly in constructor. DO NOT *8, ALREADY DONE
