@@ -6,21 +6,21 @@ TEST(CanaryTest, YellowBird){
 }
 
 TEST(BitOperations, ANDOperation){
-    uint8_t input = 0b10101010;
+    uint16_t input = 0b10101010;
     uint8_t mask = 0b01010101;
-    OperationType op = OperationType::AND;
+    auto op = AND_Operation<uint16_t, uint8_t>;
 
-    operation_map.at(op)(input, mask);
+    op(input, mask);
     
     EXPECT_TRUE(input == 0b00000000);
 }
 
 TEST(BitOperations, OROperation){
-    uint8_t input = 0b10101010;
+    uint16_t input = 0b10101010;
     uint8_t mask = 0b01010101;
-    OperationType op = OperationType::OR;
+    auto  op = OR_Operation<uint16_t, uint8_t>;
 
-    operation_map.at(op)(input, mask);
+    op(input, mask);
     
     EXPECT_TRUE(input == 0b11111111);
 }
@@ -28,9 +28,9 @@ TEST(BitOperations, OROperation){
 TEST(BitOperations, XOROperation){
     uint8_t input = 0b00101010;
     uint8_t mask = 0b01010101;
-    OperationType op = OperationType::XOR;
+    auto  op = XOR_Operation<uint8_t, uint8_t>;
 
-    operation_map.at(op)(input, mask);
+    op(input, mask);
     
     EXPECT_TRUE(input == 0b01111111);
 }
@@ -38,9 +38,9 @@ TEST(BitOperations, XOROperation){
 TEST(BitOperations, SHIFTLEFTOperation){
     uint8_t input = 0b00101010;
     uint8_t amount = 0b00000010;
-    OperationType op = OperationType::SHIFT_LEFT;
+    auto op = SHIFT_LEFT_Operation<uint8_t, uint8_t>;
 
-    operation_map.at(op)(input, amount);
+    op(input, amount);
     
     EXPECT_TRUE(input == 0b10101000);
 }
@@ -48,9 +48,9 @@ TEST(BitOperations, SHIFTLEFTOperation){
 TEST(BitOperations, SHIFTRIGHTOperation){
     uint8_t input = 0b00101010;
     uint8_t amount = 0b00100010;
-    OperationType op = OperationType::SHIFT_RIGHT;
+    auto op = SHIFT_RIGHT_Operation<uint8_t, uint8_t>;
 
-    operation_map.at(op)(input, amount);
+    op(input, amount);
     
     EXPECT_TRUE(input == 0b00001010);
 }
@@ -58,9 +58,9 @@ TEST(BitOperations, SHIFTRIGHTOperation){
 TEST(BitOperations, NOTOperation){
     uint8_t input = 0b00101010;
     uint8_t unused = 0;
-    OperationType op = OperationType::NOT;
+    auto op = NOT_Operation<uint8_t, uint8_t>;
 
-    operation_map.at(op)(input, unused);
+    op(input, unused);
     
     EXPECT_TRUE(input == 0b11010101);
 }
@@ -68,9 +68,9 @@ TEST(BitOperations, NOTOperation){
 TEST(BitOperations, NONEOperation){
     uint8_t input = 0b00101010;
     uint8_t unused = 0;
-    OperationType op = OperationType::NONE;
+    auto op = NONE_Operation<uint8_t, uint8_t>;
 
-    operation_map.at(op)(input, unused);
+    op(input, unused);
     
     EXPECT_TRUE(input == 0b00101010);
 }
@@ -97,35 +97,25 @@ TEST(BitMaskOperations, UpdateMemory){
 }
 
 TEST(OperationNodeConstruction, SetOffset){
-    OperationNode<uint64_t> OpNode(2, 0b00001111, 1, OperationType::OR);
+    OperationNode<uint64_t, uint8_t> OpNode(2, 8);
 
     EXPECT_EQ(OpNode.offset, 16);
 }
 
-TEST(OperationNodeConstruction, SetStep){
-    OperationNode<uint64_t> OpNode(2, 0b00001111, 0, OperationType::OR);
-
-    EXPECT_EQ(OpNode.step, 1);
-}
-
-TEST(OperationNodeConstruction, SetOperationType){
-    OperationNode<uint64_t> OpNode(2, 0b00001111, 0, OperationType::OR);
-
-    EXPECT_EQ(OpNode.operation, OperationType::OR);
-}
-
 TEST(OperationNodeConstruction, SetShiftAmount){
-    OperationNode<uint64_t> OpNode(2, 0b00001111, 0, OperationType::SHIFT_LEFT, 15);
+    auto op = OR_Operation<uint64_t, uint8_t>;
+    OperationNode<uint64_t, uint8_t> OpNode(2, 8, 0b00001111, op, 15);
 
-    EXPECT_EQ(OpNode.shiftAmount, 7);
+    EXPECT_EQ(OpNode.shiftAmount, 15);
 }
 
 TEST(OperationNodeOperations, ApplyOffset0NodeToInput){
     uint64_t input = 0b01010101;
     uint64_t expected_output = 0b01011111;
-    OperationNode<uint64_t> OpNode(0, 0b00001111, 1, OperationType::OR);
+    auto op = OR_Operation<uint64_t, uint8_t>;
+    OperationNode<uint64_t, uint8_t> OpNode(0, 8, 0b00001111, op);
 
-    apply_operation_node(OpNode, input);
+    OpNode.apply_operation_node(input);
 
     EXPECT_EQ(*OpNode.output, expected_output);
 }
@@ -133,9 +123,10 @@ TEST(OperationNodeOperations, ApplyOffset0NodeToInput){
 TEST(OperationNodeOperations, ApplyOffset2NodeToInput){
     uint64_t input = 0b0000000000000000000000000000000000000000010101010000000000000000;
     uint64_t expected_output = 0b0000000000000000000000000000000000000000010111110000000001011111;
-    OperationNode<uint64_t> OpNode(2, 0b00001111, 1, OperationType::OR);
+    auto op = OR_Operation<uint64_t, uint8_t>;
+    OperationNode<uint64_t, uint8_t> OpNode(2, 8, 0b00001111, op);
 
-    apply_operation_node(OpNode, input);
+    OpNode.apply_operation_node(input);
 
     EXPECT_EQ(*OpNode.output, expected_output);
 }
@@ -143,9 +134,10 @@ TEST(OperationNodeOperations, ApplyOffset2NodeToInput){
 TEST(OperationNodeOperations, ApplyOffset5NodeToInput){
     uint64_t input = 0b0000000000000000010101010000000000000000000000000000000000000000;
     uint64_t expected_output = 0b0000000000000000010111110000000000000000010111110000000001011111;
-    OperationNode<uint64_t> OpNode(5, 0b00001111, 1, OperationType::OR);
+    auto op = OR_Operation<uint64_t, uint8_t>;
+    OperationNode<uint64_t, uint8_t> OpNode(5, 8, 0b00001111, op);
 
-    apply_operation_node(OpNode, input);
+    OpNode.apply_operation_node(input);
 
     EXPECT_EQ(*OpNode.output, expected_output);
 }
@@ -153,9 +145,10 @@ TEST(OperationNodeOperations, ApplyOffset5NodeToInput){
 TEST(OperationNodeOperations, ApplyOffset7NodeToInput){
     uint64_t input = 0b0101010100000000000000000000000000000000000000000000000000000000;
     uint64_t expected_output = 0b0101111100000000010111110000000000000000010111110000000001011111;
-    OperationNode<uint64_t> OpNode(7, 0b00001111, 1, OperationType::OR);
+    auto op = OR_Operation<uint64_t, uint8_t>;
+    OperationNode<uint64_t, uint8_t> OpNode(7, 8, 0b00001111, op);
 
-    apply_operation_node(OpNode, input);
+    OpNode.apply_operation_node(input);
 
     EXPECT_EQ(*OpNode.output, expected_output);
 }

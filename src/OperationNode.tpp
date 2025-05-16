@@ -1,26 +1,14 @@
 #include "core_logic.hpp"
 
-template<typename T>
-OperationNode<T>::OperationNode(uint8_t offset, uint8_t mask, uint8_t step, OperationType operation, uint8_t shiftAmount) : offset(offset << 3), mask(mask), step(step |= 0b00000001), operation(operation), shiftAmount(shiftAmount & 0x07), accept(false) {
-    //Offset * 8 == location in output
-    //Offset is right to left I.E. bit #64 for a uint64_t == bit #0
-    //Offset set properly in constructor. DO NOT *8, ALREADY DONE
-
-    //step |= 0b00000001
-    //Included check to ensure step is odd
-    //However, this doesn't let us keep a step of 0
-
-    //shiftAmount & 0x07
-    //Caps shift to 7, prevents wiping all bits out of an 8 bit range
-
+template<typename T, typename S>
+OperationNode<T, S>::OperationNode(uint8_t offset, int section_size, S mask, std::function<void(T&, const S&)> operation, S shiftAmount) : offset(offset * section_size), section_size(section_size), mask(mask), operation(operation), shiftAmount(shiftAmount), accept(false) {
     output = &output_value;
 };
 
-template<typename T>
-//Apply our OperationNode to our input
-//Can pass the full uint*_t &input and take the uint8_t input_section using offset
-void apply_operation_node(const OperationNode<T> &OpNode, const T &input){
-    uint8_t input_section = (input >> OpNode.offset) & 0b11111111; //Use | 0?
-    operation_map.at(OpNode.operation)(input_section, OpNode.mask);
-    *OpNode.output |= (static_cast<T>(input_section) << OpNode.offset);
-}
+//This should allow NONE_Operation to work as well, but it introduces inefficiency by needing to copy each section instead of simply replacing it.
+template<typename T, typename S>
+void OperationNode<T, S>::apply_operation_node(const T &input){
+    T input_section = ((((static_cast<T>(0b1) << section_size) - 1) << offset) & input) >> offset;
+    operation(input_section, mask);
+    *output |= (input_section << offset);
+};

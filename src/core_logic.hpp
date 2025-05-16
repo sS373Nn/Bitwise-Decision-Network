@@ -8,6 +8,9 @@
 #include <vector> //Unneeded
 #include <bitset>
 
+//Set to uint64_t for now, can be changed to larger or smaller value as input size varies
+extern uint64_t output_value;
+
 enum class OperationType{
     AND,
     OR,
@@ -18,40 +21,45 @@ enum class OperationType{
     NONE
 };
 
+template<typename T, typename S>
+const auto AND_Operation = [](T &input, const S &mask) {input &= mask;};
 
-template<typename T>
+template<typename T, typename S>
+const auto OR_Operation = [](T &input, const S &mask) {input |= mask;};
+
+template<typename T, typename S>
+const auto XOR_Operation = [](T &input, const S &mask) {input ^= mask;};
+
+template<typename T, typename S>
+const auto SHIFT_LEFT_Operation = [](T &input, const S &amount) {input <<= amount;};
+
+template<typename T, typename S>
+const auto SHIFT_RIGHT_Operation = [](T &input, const S &amount) {input >>= amount;};
+
+template<typename T, typename S>
+const auto NOT_Operation = [](T &input, const S &unused) {input = ~input;};
+
+template<typename T, typename S>
+const auto NONE_Operation = [](T &input, const S &unused) {return;};
+
+template<typename T, typename S>
 struct OperationNode{
-    //Can use std::unordered_set<uint8_t> to determine if we've already used a mask or not
-    //std::unoredered_set too clunky for lager number of nodes -> std::bitset instead
-    uint8_t mask; //The mask IS the index
-    uint8_t step; //MUST be an odd number between 1-255 inclusive
-    std::bitset<256> used_mask_memory; //Can keep if necessary later
+    S mask;
+    S input_section;
+    S shiftAmount; //set iff op == shift
 
-    //Place modified bits into the output at offset
-    T *output; //Change to template?
     uint8_t offset;
+    int section_size; //allow user to modify the chunks of input upon which each node operates.
+
+    std::function<void(T&, const S&)> operation;
     
-    //Pick op at random?
-    OperationType operation;
+    //Place modified bits into the output at offset
+    T *output;
+    bool accept; //Change to 'pass' to disable Node
 
-    //Should be tied to SHIFT iff op == SHIFT
-    //Default shiftAmount == 0
-    //If op != shift, then don't input shift value
-    uint8_t shiftAmount;
-
-    //Retry operation with new values
-    //Initialize to true
-    //Set to false on acceptance
-    bool accept;
-
-    OperationNode(uint8_t offset = 0, uint8_t mask = 0, uint8_t step = 1, OperationType operation = OperationType::NONE, uint8_t shiftAmount = 0);
+    OperationNode(uint8_t offset = 0, int section_size = 1, S mask = 0, std::function<void(T&, const S&)> operation = NONE_Operation<T, S>, S shiftAmount = 0);
+    void apply_operation_node(const T &input);
 };
-
-//std::unorder_map for lambda operation calls
-extern const std::unordered_map<OperationType, std::function<void(uint8_t&, const uint8_t&)>> operation_map;
-
-//Set to uint64_t for now, can be changed to larger or smaller value as input size varies
-extern uint64_t output_value;
 
 //Iterates through all possible masks from 0-255 one step at a time
 //Step MUST be an odd int between 1-255 inclusive
@@ -59,10 +67,6 @@ void update_mask(uint8_t &mask, const uint8_t &step);
 
 //Check to ensure our mask has not been used
 void mark_mask_in_memory(std::bitset<256> &applied_masks_memory, const uint8_t &mask);
-
-//Apply our OperationNode to our input
-template<typename T>
-void apply_operation_node(const OperationNode<T> &OpNode, const T &input);
 
 #include "OperationNode.tpp"
 
