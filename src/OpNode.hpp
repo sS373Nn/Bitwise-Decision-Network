@@ -1,22 +1,15 @@
 #ifndef OPNODE_H
 #define OPNODE_H
 
+#include "OperationType.hpp"
+
 #include <iostream> //move to test_file if not needed here
 #include <cstdint>
 #include <unordered_map>
 #include <functional>
-#include <vector> //Unneeded
-#include <bitset> //Unneeded
-#include <variant> //Unneeded
 
 //Set to uint64_t for now, can be changed to larger or smaller value as input size varies
 extern uint64_t OUTPUT_VALUE;
-
-enum class OperationType{
-    AND,
-    OR,
-    NONE
-};
 
 extern const std::unordered_map<OperationType, std::function<void(uint64_t&, const uint8_t&)>> operation_map;
 

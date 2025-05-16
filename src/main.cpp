@@ -1,4 +1,4 @@
-#include "core_logic.hpp"
+#include "OpNode.hpp"
 
 int main(int argc, char* argv[]){
 

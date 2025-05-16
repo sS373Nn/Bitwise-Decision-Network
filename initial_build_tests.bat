@@ -12,16 +12,22 @@ g++ -I"C:/Users/David/DevLibs/googletest/googletest-1.17.0/googletest/include" -
 echo [Compiling project sources...]
 
 g++ -c src/OpNode.cpp -o src/OpNode.o
+g++ -c src/memory.cpp -o src/memory.o
 
 
 echo [Compiling test file...]
 
 g++ -I./src -I"C:/Users/David/DevLibs/googletest/googletest-1.17.0/googletest/include" -c test/OpNode_tests.cpp -o test/OpNode_tests.o
+g++ -I./src -I"C:/Users/David/DevLibs/googletest/googletest-1.17.0/googletest/include" -c test/memory_tests.cpp -o test/memory_tests.o
 
 
 echo [Linking...]
 
 g++ -o run_OpNode_tests src/OpNode.o test/OpNode_tests.o test/gtest-all.o test/gtest_main.o
+g++ -o run_memory_tests src/memory.o test/memory_tests.o test/gtest-all.o test/gtest_main.o
 
 
-echo [Build Complete. Run with ./run_OpNode_tests]
+echo [Build Complete.]
+echo [Run with:]
+echo [ ./run_OpNode_tests]
+echo [ ./run_memory_tests]
