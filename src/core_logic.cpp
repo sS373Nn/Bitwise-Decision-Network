@@ -1,22 +1,18 @@
 #include "core_logic.hpp"
 
-uint64_t output_value = 0;
+uint64_t OUTPUT_VALUE = 0;
 
-//Iterates through all possible masks from 0-255 one step at a time
-//Step MUST be an odd int between 1-255 inclusive
-void update_mask(uint8_t &mask, const uint8_t &step){
-    mask += step;
-}
+const std::unordered_map<OperationType, std::function<void(uint64_t&, const uint8_t&)>> operation_map = {
+    {OperationType::AND, [](uint64_t &input, const uint8_t &mask) {return input &= mask;}},
+    {OperationType::OR, [](uint64_t &input, const uint8_t &mask) {return input |= mask;}}
+};
 
-//Decouple or remove marking the applied_mask_memory?
-//Could return a bool to mark success or failure?
-//Use to determine valid mask
-//Maybe pbr mask so we can increment until a valid mask is found?
-void mark_mask_in_memory(std::bitset<256> &applied_masks_memory, const uint8_t &mask){
-    //For now, just set the indicated bit
-    //Can also check to see if all masks have been used
-    //Can check to see if the current mask has been used
-    //If so, can increment mask to an unused mask
-    //Can reset the bitset if ALL masks have been used and indicate this as a break; for computation
-    applied_masks_memory.set(mask);
+OperationNode::OperationNode(uint8_t offset, uint8_t section_size, uint8_t mask, OperationType operation, uint8_t shiftAmount) : offset(offset * section_size), section_size(section_size), mask(mask), operation(operation), shiftAmount(shiftAmount) {
+    output = &OUTPUT_VALUE;
+};
+
+void OperationNode::apply_operation_node(const uint64_t &input){
+    uint64_t input_section = ((((0b1ULL << section_size) - 1) << offset) & input) >> offset;
+    operation_map.at(operation)(input_section, mask);
+    *output |= (input_section << offset);
 }
