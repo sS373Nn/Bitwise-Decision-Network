@@ -11,16 +11,17 @@ g++ -I"C:/Users/David/DevLibs/googletest/googletest-1.17.0/googletest/include" -
 
 echo [Compiling project sources...]
 
-g++ -c src/core_logic.cpp -o src/core_logic.o
+g++ -c src/OpNode.cpp -o src/OpNode.o
+
 
 echo [Compiling test file...]
 
-g++ -I./src -I"C:/Users/David/DevLibs/googletest/googletest-1.17.0/googletest/include" -c test/google_tests.cpp -o test/google_tests.o
+g++ -I./src -I"C:/Users/David/DevLibs/googletest/googletest-1.17.0/googletest/include" -c test/OpNode_tests.cpp -o test/OpNode_tests.o
 
 
 echo [Linking...]
 
-g++ -o run_tests src/core_logic.o test/google_tests.o test/gtest-all.o test/gtest_main.o
+g++ -o run_OpNode_tests src/OpNode.o test/OpNode_tests.o test/gtest-all.o test/gtest_main.o
 
 
-echo [Build Complete. Run with ./run_tests]
+echo [Build Complete. Run with ./run_OpNode_tests]

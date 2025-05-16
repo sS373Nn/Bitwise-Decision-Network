@@ -1,4 +1,4 @@
-#include "core_logic.hpp"
+#include "OpNode.hpp"
 
 uint64_t OUTPUT_VALUE = 0;
 

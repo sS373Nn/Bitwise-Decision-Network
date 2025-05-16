@@ -1,5 +1,5 @@
-#ifndef CORE_LOGIC_H
-#define CORE_LOGIC_H
+#ifndef OPNODE_H
+#define OPNODE_H
 
 #include <iostream> //move to test_file if not needed here
 #include <cstdint>
@@ -15,10 +15,6 @@ extern uint64_t OUTPUT_VALUE;
 enum class OperationType{
     AND,
     OR,
-    XOR,
-    SHIFT_LEFT,
-    SHIFT_RIGHT,
-    NOT,
     NONE
 };
 

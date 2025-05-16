@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "core_logic.hpp"
+#include "OpNode.hpp"
 
 TEST(CanaryTest, YellowBird){
     EXPECT_TRUE(true);
