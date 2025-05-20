@@ -7,6 +7,8 @@ const std::unordered_map<OperationType, std::function<void(uint64_t&, const uint
     {OperationType::OR, [](uint64_t &input, const uint8_t &mask) {return input |= mask;}}
 };
 
+OperationNode::OperationNode() : OperationNode(0, 1, 0, OperationType::NONE, 0) {};
+
 OperationNode::OperationNode(uint8_t offset, uint8_t section_size, uint8_t mask, OperationType operation, uint8_t shiftAmount) : offset(offset * section_size), section_size(section_size), mask(mask), operation(operation), shiftAmount(shiftAmount) {
     output = &OUTPUT_VALUE;
 };

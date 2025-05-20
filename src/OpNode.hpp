@@ -24,7 +24,8 @@ struct OperationNode{
     uint64_t *output;
     bool accept; //Change to 'pass' to disable Node
 
-    OperationNode(uint8_t offset = 0, uint8_t section_size = 1, uint8_t mask = 0, OperationType operation = OperationType::NONE, uint8_t shiftAmount = 0);
+    OperationNode();
+    OperationNode(uint8_t offset, uint8_t section_size = 1, uint8_t mask = 0, OperationType operation = OperationType::NONE, uint8_t shiftAmount = 0);
     void apply_operation_node(const uint64_t &input);
 };
 

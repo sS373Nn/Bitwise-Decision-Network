@@ -25,6 +25,12 @@ TEST(BitOperations, OROperation){
     EXPECT_TRUE(input == 0b11111111);
 }
 
+TEST(OperationNodeConstruction, DefaultConstructor){
+    OperationNode OpNode;
+
+    EXPECT_EQ(OpNode.operation, OperationType::NONE);
+}
+
 TEST(OperationNodeConstruction, SetOffset){
     OperationNode OpNode(2, 8);
 
