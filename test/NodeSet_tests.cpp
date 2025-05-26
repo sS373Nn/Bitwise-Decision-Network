@@ -8,3 +8,10 @@ TEST(NodeSetCreation, EmptyNodeSet){
 
     EXPECT_EQ(OperationType::NONE, emptyNodeSet.get_nodes()[0].operation);
 }
+
+TEST(NodeSetCreation, ANDNodeSet){
+    uint8_t operations_bitwise = 0b00000001;
+    NodeSet ANDNodeSet(operations_bitwise);
+
+    EXPECT_EQ(OperationType::AND, ANDNodeSet.get_nodes()[1].operation);
+}

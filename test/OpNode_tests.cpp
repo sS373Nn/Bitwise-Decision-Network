@@ -32,13 +32,13 @@ TEST(OperationNodeConstruction, DefaultConstructor){
 }
 
 TEST(OperationNodeConstruction, SetOffset){
-    OperationNode OpNode(2, 8);
+    OperationNode OpNode(8, OperationType::NONE, 2);
 
     EXPECT_EQ(OpNode.offset, 16);
 }
 
 TEST(OperationNodeConstruction, SetShiftAmount){
-    OperationNode OpNode(2, 8, 0b00001111, OperationType::NONE, 15);
+    OperationNode OpNode(8, OperationType::NONE, 2, 0b00001111, 15);
 
     EXPECT_EQ(OpNode.shiftAmount, 15);
 }
@@ -47,7 +47,7 @@ TEST(OperationNodeOperations, ApplyOffset0NodeToInput){
     uint64_t input = 0b01010101;
     uint64_t expected_output = 0b01011111;
     OperationType op = OperationType::OR;
-    OperationNode OpNode(0, 8, 0b00001111, op);
+    OperationNode OpNode(8, op, 0, 0b00001111);
 
     OpNode.apply_operation_node(input);
 
@@ -58,7 +58,7 @@ TEST(OperationNodeOperations, ApplyOffset2NodeToInput){
     uint64_t input = 0b0000000000000000000000000000000000000000010101010000000000000000;
     uint64_t expected_output = 0b0000000000000000000000000000000000000000010111110000000001011111;
     OperationType op = OperationType::OR;
-    OperationNode OpNode(2, 8, 0b00001111, op);
+    OperationNode OpNode(8, op, 2, 0b00001111);
 
     OpNode.apply_operation_node(input);
 
@@ -69,7 +69,7 @@ TEST(OperationNodeOperations, ApplyOffset5NodeToInput){
     uint64_t input = 0b0000000000000000010101010000000000000000000000000000000000000000;
     uint64_t expected_output = 0b0000000000000000010111110000000000000000010111110000000001011111;
     OperationType op = OperationType::OR;
-    OperationNode OpNode(5, 8, 0b00001111, op);
+    OperationNode OpNode(8, op, 5, 0b00001111);
 
     OpNode.apply_operation_node(input);
 
@@ -80,7 +80,7 @@ TEST(OperationNodeOperations, ApplyOffset7NodeToInput){
     uint64_t input = 0b0101010100000000000000000000000000000000000000000000000000000000;
     uint64_t expected_output = 0b0101111100000000010111110000000000000000010111110000000001011111;
     OperationType op = OperationType::OR;
-    OperationNode OpNode(7, 8, 0b00001111, op);
+    OperationNode OpNode(8, op, 7, 0b00001111);
 
     OpNode.apply_operation_node(input);
 
