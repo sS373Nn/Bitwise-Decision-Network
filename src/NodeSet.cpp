@@ -17,6 +17,11 @@ void create_nodes(std::vector<OperationNode> &nodes, const uint8_t &operation_bi
         OperationNode ANDNode(section_size, OperationType::AND);
         nodes.push_back(ANDNode);
     }
+    
+    if(operation_bitwise & 0b00000010){
+        OperationNode ORNode(section_size, OperationType::OR);
+        nodes.push_back(ORNode);
+    }
 }
 
 
