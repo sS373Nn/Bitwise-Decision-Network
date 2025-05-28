@@ -5,16 +5,19 @@
 
 class NodeSet{
 public:
-    NodeSet(uint8_t operation_bitwise = 0, uint8_t input_size = 0, uint8_t section_size = 0, uint8_t active_nodes_per_operation = 0);
+    NodeSet(uint8_t operation_bitwise = 0, uint8_t input_size = 1, uint8_t section_size = 1, uint8_t active_nodes_per_input = 1);
 
     std::vector<OperationNode> get_nodes();
+    void set_node_offset(const int &node, const uint8_t &new_offset);
+    void set_node_mask(const int &node, const uint8_t &new_mask);
+    void apply(const uint64_t &input, const std::vector<uint8_t> &offset_vector);
 
 private:
     std::vector<OperationNode> nodes;
     uint8_t operation_bitwise;
     uint8_t input_size;
     uint8_t section_size;
-    uint8_t active_nodes_per_operation;
+    uint8_t active_nodes_per_input;
 };
 
 //Create OperationNodes
