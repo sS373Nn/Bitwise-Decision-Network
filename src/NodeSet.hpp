@@ -1,7 +1,7 @@
 #ifndef NODESET_H
 #define NODESET_H
 
-#include "OpNode.hpp"
+#include "OperationNode.hpp"
 
 class NodeSet{
 public:

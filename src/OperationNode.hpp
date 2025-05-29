@@ -1,5 +1,5 @@
-#ifndef OPNODE_H
-#define OPNODE_H
+#ifndef OPERATIONNODE_H
+#define OPERATIONNODE_H
 
 #include "OperationType.hpp"
 

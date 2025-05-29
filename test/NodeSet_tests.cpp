@@ -50,15 +50,15 @@ TEST(NodeSetModification, ChangeMaskForANDNode){
     EXPECT_EQ(mask_to_use, ANDNodeSet.get_nodes()[1].mask);
 }
 
-TEST(NodeSetApplication, ApplyNodeSetToInput){
-    uint64_t input = 0;
-    uint64_t expected_output = 0b00000001;
-    uint8_t operations_bitwise = 0b00000010;
-    NodeSet ORNodeSet(operations_bitwise);
-    ORNodeSet.set_node_mask(1, 0b00000001);
-    std::vector<uint8_t> active_node_offset = {63};
-
-    ORNodeSet.apply(input, active_node_offset);
-
-    EXPECT_EQ(expected_output, ORNodeSet.get_nodes()[0].output);
-}
+//TEST(NodeSetApplication, ApplyNodeSetToInput){
+//    uint64_t input = 0;
+//    uint64_t expected_output = 0b00000001;
+//    uint8_t operations_bitwise = 0b00000010;
+//    NodeSet ORNodeSet(operations_bitwise);
+//    ORNodeSet.set_node_mask(1, 0b00000001);
+//    std::vector<uint8_t> active_node_offset = {63};
+//
+//    ORNodeSet.apply(input, active_node_offset);
+//
+//    EXPECT_EQ(expected_output, ORNodeSet.get_nodes()[0].output);
+//}

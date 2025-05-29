@@ -1,4 +1,4 @@
-#include "OpNode.hpp"
+#include "OperationNode.hpp"
 
 uint64_t OUTPUT_VALUE = 0;
 
