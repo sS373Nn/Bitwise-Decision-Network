@@ -31,58 +31,60 @@ TEST(OperationNodeConstruction, DefaultConstructor){
     EXPECT_EQ(OpNode.operation, OperationType::NONE);
 }
 
-TEST(OperationNodeConstruction, SetOffset){
-    OperationNode OpNode(8, OperationType::NONE, 2);
-
-    EXPECT_EQ(OpNode.offset, 16);
-}
-
 TEST(OperationNodeConstruction, SetShiftAmount){
-    OperationNode OpNode(8, OperationType::NONE, 2, 0b00001111, 15);
+    OperationNode OpNode(8, OperationType::NONE, 0b00001111, 15);
 
     EXPECT_EQ(OpNode.shiftAmount, 15);
 }
 
 TEST(OperationNodeOperations, ApplyOffset0NodeToInput){
     uint64_t input = 0b01010101;
+    uint8_t offset = 0;
+    uint64_t output = 0;
     uint64_t expected_output = 0b01011111;
     OperationType op = OperationType::OR;
-    OperationNode OpNode(8, op, 0, 0b00001111);
+    OperationNode OpNode(8, op, 0b00001111);
 
-    OpNode.apply_operation_node(input);
+    OpNode.apply_operation_node(input, offset, output);
 
-    EXPECT_EQ(*OpNode.output, expected_output);
+    EXPECT_EQ(output, expected_output);
 }
 
 TEST(OperationNodeOperations, ApplyOffset2NodeToInput){
     uint64_t input = 0b0000000000000000000000000000000000000000010101010000000000000000;
+    uint8_t offset = 2;
+    uint64_t output = 0b0000000000000000000000000000000000000000000000000000000001011111;
     uint64_t expected_output = 0b0000000000000000000000000000000000000000010111110000000001011111;
     OperationType op = OperationType::OR;
-    OperationNode OpNode(8, op, 2, 0b00001111);
+    OperationNode OpNode(8, op, 0b00001111);
 
-    OpNode.apply_operation_node(input);
+    OpNode.apply_operation_node(input, offset, output);
 
-    EXPECT_EQ(*OpNode.output, expected_output);
+    EXPECT_EQ(output, expected_output);
 }
 
 TEST(OperationNodeOperations, ApplyOffset5NodeToInput){
     uint64_t input = 0b0000000000000000010101010000000000000000000000000000000000000000;
+    uint8_t offset = 5;
+    uint64_t output = 0b0000000000000000000000000000000000000000010111110000000001011111;
     uint64_t expected_output = 0b0000000000000000010111110000000000000000010111110000000001011111;
     OperationType op = OperationType::OR;
-    OperationNode OpNode(8, op, 5, 0b00001111);
+    OperationNode OpNode(8, op, 0b00001111);
 
-    OpNode.apply_operation_node(input);
+    OpNode.apply_operation_node(input, offset, output);
 
-    EXPECT_EQ(*OpNode.output, expected_output);
+    EXPECT_EQ(output, expected_output);
 }
 
 TEST(OperationNodeOperations, ApplyOffset7NodeToInput){
     uint64_t input = 0b0101010100000000000000000000000000000000000000000000000000000000;
+    uint8_t offset = 7;
+    uint64_t output = 0b0000000000000000010111110000000000000000010111110000000001011111;
     uint64_t expected_output = 0b0101111100000000010111110000000000000000010111110000000001011111;
     OperationType op = OperationType::OR;
-    OperationNode OpNode(8, op, 7, 0b00001111);
+    OperationNode OpNode(8, op, 0b00001111);
 
-    OpNode.apply_operation_node(input);
+    OpNode.apply_operation_node(input, offset, output);
 
-    EXPECT_EQ(*OpNode.output, expected_output);
+    EXPECT_EQ(output, expected_output);
 }
